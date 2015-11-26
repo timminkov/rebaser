@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'rebaser'
+require_relative '../lib/rebaser/parser'
+
+options = Rebaser::Parser.new(ARGV).parse
+Rebaser.execute(options)
