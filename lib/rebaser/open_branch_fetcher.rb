@@ -2,11 +2,12 @@ require 'github_api'
 
 module Rebaser
   class OpenBranchFetcher
-    def initialize(username:, password:, token:, remote:)
+    def initialize(username:, password:, token:, remote:, rebase_branch:)
       @username = username
       @password = password
       @token = token
       @remote = remote
+      @rebase_branch = rebase_branch
     end
 
     def fetch
@@ -23,11 +24,11 @@ module Rebaser
 
       pull_requests = github.pull_requests.list remote_user, remote_repo, state: 'open'
 
-      branches = pull_requests.map { |pr| pr.head.ref }
+      branches = pull_requests.map { |pr| pr.head.ref if pr.base.ref === rebase_branch }.compact
       branches
     end
 
     private
-    attr_reader :username, :password, :token, :remote
+    attr_reader :username, :password, :token, :remote, :rebase_branch
   end
 end

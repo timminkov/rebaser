@@ -32,16 +32,22 @@ module Rebaser
       end
     end
 
+    unless options[:rebase_branch]
+      options[:rebase_branch] = Ask.input "Please enter the branch to rebase onto", default: 'master'
+    end
+
     branches = OpenBranchFetcher.new(
       username: options[:username],
       password: options[:password],
       token: options[:token],
       remote: options[:remote],
+      rebase_branch: options[:rebase_branch],
     ).fetch
 
     puts "\n\nHere's what I'll be rebasing today:\n"
     puts branches
     puts "\nI'll rebase these branches onto #{options[:rebase_branch]}."
+    puts "I'll only rebase if the pull request is opened against the target branch."
     puts "If I run into merge conflicts, I'll skip that branch."
     puts "This can be dangerous as I will be force pushing."
     continue = Ask.confirm "Are you sure you want to continue?", default: false
@@ -49,9 +55,6 @@ module Rebaser
     return unless continue
 
     remote = Ask.input "Please enter the remote name to push to", default: 'origin'
-    unless options[:rebase_branch]
-      options[:rebase_branch] = Ask.input "Please enter the branch to rebase onto", default: 'master'
-    end
 
     rebaser = Rebaser.new(branches, options[:rebase_branch], remote)
     rebaser.begin
