@@ -24,4 +24,4 @@ To use Rebaser, just run `rebaser` in the directory of the target project. Rebas
 
 ## Why?
 
-When someone breaks master, all branches need to be rebased to include a fix. This lets a single person do it instead of waiting for an individual.
+When someone breaks master, all branches need to be rebased to include a fix. This lets a single person do it instead of waiting for a everyone to rebase their own branches.
